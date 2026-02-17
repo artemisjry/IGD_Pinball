@@ -5,12 +5,14 @@ public class FloatieInZone : MonoBehaviour
     public Collider2D zone;
     public LayerMask ballLayer;
 
-    public float targetJitterRadius = 0.8f;
+    public float targetJitterRadius = 1.1f;
     public float retargetIntervalMin = 0.6f;
-    public float retargetIntervalMax = 1.4f;
+    public float retargetIntervalMax = 1.1f;
 
     public float moveForce = 10f;
-    public float maxSpeed = 6f;
+    public float maxSpeed = 5f;
+
+    public float wanderForce = 0.4f;
 
     public float ballPushImpulse = 12f;
     public float maxBallSpeed = 95f;
@@ -18,6 +20,10 @@ public class FloatieInZone : MonoBehaviour
     public Transform visual;
     public float pulseScale = 1.25f;
     public float pulseSpeed = 20f;
+
+    public float stuckSpeedThreshold = 0.12f;
+    public float stuckTime = 0.45f;
+    public float unstuckImpulseMultiplier = 1.2f;
 
     private Rigidbody2D rb;
     private Vector2 zoneCenter;
@@ -54,29 +60,45 @@ public class FloatieInZone : MonoBehaviour
 
         Vector2 pos = rb.position;
 
-        Vector2 desired;
-        if (!zone.OverlapPoint(pos))
-            desired = zoneCenter - pos;
-        else
-            desired = target - pos;
+        Vector2 desiredPos = zone.OverlapPoint(pos) ? target : zoneCenter;
+        Vector2 to = desiredPos - pos;
 
-        float d = desired.magnitude;
+        Vector2 desiredVel = Vector2.zero;
+        float d = to.magnitude;
         if (d > 0.001f)
-            rb.AddForce((desired / d) * moveForce, ForceMode2D.Force);
+            desiredVel = (to / d) * maxSpeed;
+
+        Vector2 dv = desiredVel - rb.linearVelocity;
+        Vector2 force = dv * (moveForce * rb.mass);
+
+        float fm = force.magnitude;
+        float maxF = moveForce * rb.mass;
+        if (fm > maxF) force = force / fm * maxF;
+
+        rb.AddForce(force, ForceMode2D.Force);
+
+        if (wanderForce > 0f)
+            rb.AddForce(Random.insideUnitCircle * wanderForce, ForceMode2D.Force);
 
         float spd = rb.linearVelocity.magnitude;
-        if (spd > maxSpeed)
-            rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
 
-        if (spd < 0.15f)
+        if (spd < stuckSpeedThreshold)
             stuckTimer += Time.fixedDeltaTime;
         else
             stuckTimer = 0f;
 
-        if (stuckTimer > 0.35f)
+        if (stuckTimer > stuckTime)
         {
             PickNewTarget(true);
-            rb.AddForce(Random.insideUnitCircle * (moveForce * 0.6f), ForceMode2D.Impulse);
+
+            Vector2 dir = (target - rb.position);
+            float dm = dir.magnitude;
+            if (dm > 0.001f)
+                dir /= dm;
+            else
+                dir = Random.insideUnitCircle.normalized;
+
+            rb.AddForce(dir * (moveForce * unstuckImpulseMultiplier), ForceMode2D.Impulse);
             stuckTimer = 0f;
         }
 
