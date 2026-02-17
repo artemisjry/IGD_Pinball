@@ -5,16 +5,21 @@ public class FloatieInZone : MonoBehaviour
     public Collider2D zone;
     public LayerMask ballLayer;
 
-    public float driftSpeed = 1.4f;
-    public float driftTurnRate = 0.35f;
+    public float driftSpeed = 0.8f;
+    public float driftTurnRate = 0.25f;
 
-    public float steeringForce = 0.8f;
-    public float maxSteeringForce = 2.5f;
+    public float steeringForce = 0.5f;
+    public float maxSteeringForce = 1.5f;
 
     public float boundaryForce = 4.0f;
     public float maxBoundaryForce = 10f;
 
     public float maxSpeed = 12f;
+
+    public float centerPullForce = 2.0f;
+    public float maxCenterPullForce = 6.0f;
+    public float calmSpeedThreshold = 0.9f;
+    public float calmDelay = 0.6f;
 
     public float ballPushImpulse = 10f;
     public float maxBallSpeed = 120f;
@@ -30,6 +35,8 @@ public class FloatieInZone : MonoBehaviour
     private Vector3 baseScale;
     private float pulseAmount;
 
+    private float lastBallHitTime;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -38,6 +45,8 @@ public class FloatieInZone : MonoBehaviour
 
         driftDir = Random.insideUnitCircle.normalized;
         if (driftDir.sqrMagnitude < 0.001f) driftDir = Vector2.right;
+
+        lastBallHitTime = -999f;
     }
 
     private void Start()
@@ -52,12 +61,13 @@ public class FloatieInZone : MonoBehaviour
 
         zoneCenter = zone.bounds.center;
 
+        Vector2 pos = rb.position;
+        Vector2 v = rb.linearVelocity;
+        float speed = v.magnitude;
+
         driftDir = Vector2.Lerp(driftDir, Random.insideUnitCircle.normalized, driftTurnRate * Time.fixedDeltaTime);
         if (driftDir.sqrMagnitude < 0.001f) driftDir = Vector2.right;
         driftDir.Normalize();
-
-        Vector2 v = rb.linearVelocity;
-        float speed = v.magnitude;
 
         Vector2 desiredVel = driftDir * driftSpeed;
         Vector2 dv = desiredVel - v;
@@ -66,7 +76,6 @@ public class FloatieInZone : MonoBehaviour
         float sm = steer.magnitude;
         if (sm > maxSteeringForce) steer = steer / sm * maxSteeringForce;
 
-        Vector2 pos = rb.position;
         bool inside = zone.OverlapPoint(pos);
 
         if (!inside)
@@ -79,6 +88,22 @@ public class FloatieInZone : MonoBehaviour
                 float bm = b.magnitude;
                 if (bm > maxBoundaryForce) b = b / bm * maxBoundaryForce;
                 rb.AddForce(b, ForceMode2D.Force);
+            }
+        }
+        else
+        {
+            bool calm = speed <= calmSpeedThreshold && (Time.time - lastBallHitTime) >= calmDelay;
+            if (calm)
+            {
+                Vector2 toCenter = zoneCenter - pos;
+                float d = toCenter.magnitude;
+                if (d > 0.001f)
+                {
+                    Vector2 c = (toCenter / d) * centerPullForce;
+                    float cm = c.magnitude;
+                    if (cm > maxCenterPullForce) c = c / cm * maxCenterPullForce;
+                    rb.AddForce(c, ForceMode2D.Force);
+                }
             }
         }
 
@@ -117,6 +142,7 @@ public class FloatieInZone : MonoBehaviour
         if (newSpeed > maxBallSpeed)
             otherRb.linearVelocity = otherRb.linearVelocity.normalized * maxBallSpeed;
 
+        lastBallHitTime = Time.time;
         pulseAmount = 1f;
     }
 }
