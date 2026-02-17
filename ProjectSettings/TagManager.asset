@@ -9,6 +9,7 @@ TagManager:
   - Slingshot
   - Floatie
   - Portal
+  - Stars
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - Slingshot
   - Water
   - Floatie
-  - 
+  - Stars
   - 
   - 
   - 

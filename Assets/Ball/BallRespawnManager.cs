@@ -41,6 +41,8 @@ public class BallRespawnManager : MonoBehaviour
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.ResetScore();
 
+        StarTarget.ResetAllTargets();
+
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlayRespawn();
 
