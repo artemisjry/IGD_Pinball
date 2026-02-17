@@ -1659,7 +1659,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5.4
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3418,20 +3418,18 @@ MonoBehaviour:
   ballLayer:
     serializedVersion: 2
     m_Bits: 256
-  targetJitterRadius: 1.1
-  retargetIntervalMin: 0.6
-  retargetIntervalMax: 1.1
-  moveForce: 10
-  maxSpeed: 5
-  wanderForce: 0.4
-  ballPushImpulse: 14
+  driftSpeed: 0.2
+  driftTurnRate: 0.35
+  steeringForce: 0.2
+  maxSteeringForce: 0.6
+  boundaryForce: 4
+  maxBoundaryForce: 10
+  maxSpeed: 12
+  ballPushImpulse: 18
   maxBallSpeed: 95
   visual: {fileID: 553481756}
   pulseScale: 1.25
   pulseSpeed: 18
-  stuckSpeedThreshold: 0.12
-  stuckTime: 0.45
-  unstuckImpulseMultiplier: 1.2
 --- !u!58 &1451283290
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3480,9 +3478,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.6
-  m_LinearDamping: 2
-  m_AngularDamping: 6
+  m_Mass: 0.25
+  m_LinearDamping: 0.15
+  m_AngularDamping: 0.8
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: 04bb1d75bf05abd4f937d66ccf08f9d9, type: 2}
   m_IncludeLayers:
