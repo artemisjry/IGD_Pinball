@@ -1224,11 +1224,11 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 2.7285705, y: -0.08028006}
+    - - {x: 2.4285705, y: 0.119719945}
       - {x: 3.1, y: 0.4}
       - {x: -2.6510565, y: 0.609017}
-      - {x: -2.056683, y: -0.014028996}
-      - {x: 0.7877854, y: -0.60901695}
+      - {x: -1.7566831, y: 0.28597102}
+      - {x: 0.18778542, y: 0.09098305}
   m_UseDelaunayMesh: 1
 --- !u!1 &507169228
 GameObject:
@@ -1822,7 +1822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PinballBumper
   minKickSpeed: 20
-  addedKickSpeed: 15
+  addedKickSpeed: 30
   maxBallSpeed: 80
   pulseScale: 1.25
   pulseSpeed: 18
@@ -2383,9 +2383,9 @@ Transform:
   m_GameObject: {fileID: 1193013983}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.3, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 6.1000004, y: 0, z: 0}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2101658766}
   - {fileID: 381561303}
@@ -2851,11 +2851,15 @@ MonoBehaviour:
   retargetIntervalMax: 2.2
   moveForce: 4
   maxSpeed: 3.5
+  wanderForce: 0.4
   ballPushImpulse: 14
   maxBallSpeed: 95
   visual: {fileID: 553481756}
   pulseScale: 1.25
   pulseSpeed: 18
+  stuckSpeedThreshold: 0.12
+  stuckTime: 0.45
+  unstuckImpulseMultiplier: 1.2
 --- !u!58 &1451283290
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3337,9 +3341,9 @@ PolygonCollider2D:
     m_Paths:
     - - {x: 5.3, y: 2.4}
       - {x: 2.9489436, y: -2.0909832}
-      - {x: 3.8122149, y: -2.3090172}
-      - {x: 5.1877856, y: -0.20901692}
-      - {x: 5.651057, y: 1.9090171}
+      - {x: 3.712215, y: -1.3090172}
+      - {x: 4.3877854, y: 0.09098309}
+      - {x: 5.2510567, y: 1.8090171}
   m_UseDelaunayMesh: 1
 --- !u!114 &1639823775
 MonoBehaviour:
@@ -3419,7 +3423,7 @@ Transform:
   m_GameObject: {fileID: 1708405929}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.9055994, y: -2.15, z: 0}
+  m_LocalPosition: {x: -1.3944006, y: 0.049999952, z: 0}
   m_LocalScale: {x: 0.6255178, y: 0.6255178, z: 0.6255178}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3533,7 +3537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PinballBumper
   minKickSpeed: 20
-  addedKickSpeed: 15
+  addedKickSpeed: 30
   maxBallSpeed: 80
   pulseScale: 1.25
   pulseSpeed: 18
@@ -3840,7 +3844,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -5174,9 +5178,9 @@ Transform:
   m_GameObject: {fileID: 2060151903}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0.20000005, y: 0, z: 0}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1732061148}
   - {fileID: 607829998}
