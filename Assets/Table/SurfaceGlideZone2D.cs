@@ -15,6 +15,13 @@ public class SurfaceGlideZone2D : MonoBehaviour
     public float currentResponsiveness = 3.5f;
     public float maxCurrentForce = 14f;
 
+    public float currentReturnRate = 3f;
+
+    float min = -20f;
+    float max = 100f;
+    float speed = 200f;
+
+
     private readonly HashSet<Rigidbody2D> inside = new HashSet<Rigidbody2D>();
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -30,8 +37,17 @@ public class SurfaceGlideZone2D : MonoBehaviour
         if (rb != null) inside.Remove(rb);
     }
 
+    public void NudgeCurrentX(float amount)
+    {
+        current.x += amount;
+    }
+
     private void FixedUpdate()
     {
+        float range = (max - min) / 2f;
+        float midPoint = min + range;
+        current.y = midPoint + Mathf.Sin(Time.time * speed) * range;
+
         foreach (var rb in inside)
         {
             if (rb == null) continue;
@@ -58,6 +74,15 @@ public class SurfaceGlideZone2D : MonoBehaviour
                 if (m > maxCurrentForce) cf = cf / m * maxCurrentForce;
                 rb.AddForce(cf, ForceMode2D.Force);
             }
+
         }
+
+        if (current.x != 0)
+        {
+            current.x = Mathf.MoveTowards(current.x, 0f, currentReturnRate * Time.deltaTime);
+        }
+
+     
+        
     }
 }

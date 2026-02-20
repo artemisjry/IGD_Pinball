@@ -28,6 +28,10 @@ public class FloatieInZone : MonoBehaviour
     public float pulseScale = 1.25f;
     public float pulseSpeed = 20f;
 
+    public bool hardClampToZone = true;
+    public float clampInset = 0.08f;
+    public float clampDampen = 0.55f;
+
     private Rigidbody2D rb;
     private Vector2 driftDir;
     private Vector2 zoneCenter;
@@ -65,6 +69,27 @@ public class FloatieInZone : MonoBehaviour
         Vector2 v = rb.linearVelocity;
         float speed = v.magnitude;
 
+        Vector2 closest = zone.ClosestPoint(pos);
+        bool inside = (closest - pos).sqrMagnitude < 0.000001f;
+
+        if (!inside && hardClampToZone)
+        {
+            Vector2 inward = zoneCenter - closest;
+            float im = inward.magnitude;
+            if (im > 0.001f) inward /= im;
+            else inward = Vector2.up;
+
+            rb.position = closest + inward * clampInset;
+            rb.linearVelocity *= clampDampen;
+
+            pos = rb.position;
+            v = rb.linearVelocity;
+            speed = v.magnitude;
+
+            closest = zone.ClosestPoint(pos);
+            inside = (closest - pos).sqrMagnitude < 0.000001f;
+        }
+
         driftDir = Vector2.Lerp(driftDir, Random.insideUnitCircle.normalized, driftTurnRate * Time.fixedDeltaTime);
         if (driftDir.sqrMagnitude < 0.001f) driftDir = Vector2.right;
         driftDir.Normalize();
@@ -75,8 +100,6 @@ public class FloatieInZone : MonoBehaviour
         Vector2 steer = dv * steeringForce;
         float sm = steer.magnitude;
         if (sm > maxSteeringForce) steer = steer / sm * maxSteeringForce;
-
-        bool inside = zone.OverlapPoint(pos);
 
         if (!inside)
         {

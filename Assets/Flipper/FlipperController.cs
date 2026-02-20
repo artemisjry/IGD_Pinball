@@ -16,6 +16,11 @@ public class FlipperController : MonoBehaviour
     private bool held;
     private bool forcingUp;
 
+    public SurfaceGlideZone2D glideZone;
+    public float currentXStep = 0.1f;
+
+    public bool isLeftFlipper;
+
     private void Awake()
     {
         hinge = GetComponent<HingeJoint2D>();
@@ -42,6 +47,12 @@ public class FlipperController : MonoBehaviour
     {
         held = true;
         forcingUp = true;
+
+        if (glideZone != null)
+        {
+            float dir = isLeftFlipper ? +3f : -3f;
+            glideZone.NudgeCurrentX(dir * currentXStep);
+        }
     }
 
     private void OnCanceled(InputAction.CallbackContext ctx)

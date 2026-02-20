@@ -41,6 +41,9 @@ public class StarTarget : MonoBehaviour
             ScoreManager.Instance.AddScore(points);
 
         sequenceIndex++;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayScore();
     }
 
     void ResetState()

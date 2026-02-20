@@ -11,7 +11,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip collisionClip;
     public AudioClip respawnClip;
     public AudioClip launchClip;
-
+    public AudioClip scoreClip;
+    public AudioClip portalClip;
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,6 +38,12 @@ public class AudioManager : MonoBehaviour
     {
         if (collisionClip != null)
             sfxSource.PlayOneShot(collisionClip);
+    }
+
+    public void PlayScore()
+    {
+        if(scoreClip != null)
+            sfxSource.PlayOneShot(scoreClip);
     }
 
     public void PlayRespawn()
